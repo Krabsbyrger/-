@@ -1,0 +1,79 @@
+CREATE TABLE USERS(
+	id SERIAL NOT NULL PRIMARY KEY,
+	login VARCHAR(255) NOT NULL,
+	password VARHCAR(255) NOT NULL,
+	roots BOOL NOT NULL)
+	
+CREATE TABLE PLANE(
+	id SERIAL NOT NULL PRIMARY KEY,
+	place_from VARCHAR(255) NOT NULL,
+	place_to VARCHAR(255) NOT NULL,
+	count_free_seats INTEGER NOT NULL,
+	cost INTEGER NOT NULL,
+	date_from DATE NOT NULL,
+	date_to DATE NOT NULL,
+	time_from TIME NOT NULL,
+	time_to TIME NOT NULL)
+	
+CREATE TABLE USER_PLANE(
+	id SERIAL NOT NULL PRIMARY KEY,
+	id_user INTEGER REFERENCES USERS(id),
+	id_plane INTEGER NOT NULL REFERENCES PLANE(id),
+	seat_number INTEGER NOT NULL)
+	
+CREATE TABLE USER_SUBSCRIBE(
+	id SERIAL NOT NULL PRIMARY KEY,
+	id_user INTEGER NOT NULL REFERENCES USERS(id),
+	place_from VARCHAR(255),
+	place_to VARCHAR(255))
+	
+--3--
+
+SELECT *
+FROM PLANE
+WHERE date_from = '2021-05-31', date_to = '2021-06-01'
+
+SELECT *
+FROM PLANE date_from = '2021-05-31', time_from = '21:35'
+
+--4--
+
+Маршрут с пересадками получится сделать в программе, ну не как в SQL.
+Потребуется рекурсия.
+
+--5--
+
+SELECT count(seat_number)
+FROM USER_PLANE
+WHERE id_plane = 4 AND id_user IS NULL
+
+--6--
+UPDATE USER_PLANE
+SET id_user = 4
+WHERE id_plane 4 AND seat_number = 35
+
+UPDATE PLANE
+SET count_free_seats = count_free_seats - 1
+WHERE id = 4
+
+--7--
+INSERT INTO PLANE (place_from, place_to, count_of_seats, 
+				   cost, date_from, date_to, time_from, time_to)
+VALUES ('Дагестан', 'Казахстан', 100, 8699, '2021-06-08', '2021-06-08',
+	   '8:00', '11:31')
+	   
+	   
+INSERT INTO USER_PLANE (id_plane, seat_number)
+VALUES (15, (От i = 0 до 100))
+
+--8--
+SELECT *
+FROM USER_PLANE
+WHERE id_user = 5 AND place_from = 'Дагестан'
+
+(То же самое, но с полями place_to, date_from, date_to)
+
+--9, 10--
+INSERT INTO USER_SUBSCRIBE (id_user, place_from, place_to)
+VALUES(16, 'Дагестан', 'Россия')
+
